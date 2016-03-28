@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using ARDrone.Control;
+using ARDrone.Control.Commands;
+using ARDrone.Control.Data;
+using ARDrone.Control.Events;
+
 public class KeyEvents : MonoBehaviour
 {
+
+    public DroneControl droneControl = null;
 
     // Use this for initialization
     void Start()
