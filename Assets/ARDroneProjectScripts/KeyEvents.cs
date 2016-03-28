@@ -14,7 +14,7 @@ public class KeyEvents : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        droneControl = new DroneControl();
     }
 
     // Update is called once per frame
