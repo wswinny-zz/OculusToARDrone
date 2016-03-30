@@ -65,28 +65,28 @@ public class KeyEvents : MonoBehaviour
         {
             oculusControl = false;
             drone.enterHoverMode();
-            Debug.Log("Shift");
+            Debug.Log("Emergency stop");
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             oriantation.setGaz(.2f);
             drone.move(oriantation);
-            Debug.Log("Up");
+            Debug.Log("Up - Down");
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             oriantation.setGaz(-.2f);
             drone.move(oriantation);
-            Debug.Log("Down");
+            Debug.Log("Down - Down");
         }
 
         if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
         {
             oriantation.setGaz(0.0f);
             drone.move(oriantation);
-            Debug.Log("Down");
+            Debug.Log("Up/Down - Up");
         }
 
         //
@@ -126,65 +126,65 @@ public class KeyEvents : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                oriantation.setPitch(.2f);
+                oriantation.setPitch(-.2f);
                 drone.move(oriantation);
-                Debug.Log("W");
+                Debug.Log("W - Down");
             }
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                oriantation.setRoll(-.2f);
+                oriantation.setRoll(.2f);
                 drone.move(oriantation);
-                Debug.Log("A");
+                Debug.Log("A - Down");
             }
 
             if (Input.GetKeyDown(KeyCode.S))
             {
                 oriantation.setPitch(-.2f);
                 drone.move(oriantation);
-                Debug.Log("S");
+                Debug.Log("S -  Down");
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
                 oriantation.setRoll(.2f);
                 drone.move(oriantation);
-                Debug.Log("D");
+                Debug.Log("D - Down");
             }
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 oriantation.setYaw(-.2f);
                 drone.move(oriantation);
-                Debug.Log("Left");
+                Debug.Log("Left - Down");
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 oriantation.setYaw(.2f);
                 drone.move(oriantation);
-                Debug.Log("Right");
+                Debug.Log("Right - Down");
             }
 
             if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.W))
             {
                 oriantation.setPitch(0.0f);
                 drone.move(oriantation);
-                Debug.Log("S");
+                Debug.Log("W/S - Up");
             }
 
             if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
             {
                 oriantation.setRoll(0.0f);
                 drone.move(oriantation);
-                Debug.Log("D");
+                Debug.Log("D/A - Up");
             }
 
             if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
             {
                 oriantation.setYaw(0.0f);
                 drone.move(oriantation);
-                Debug.Log("Right");
+                Debug.Log("Right/Left - Up");
             }
         }
 
@@ -192,6 +192,7 @@ public class KeyEvents : MonoBehaviour
 
 }
 
+//Holds orientation of the drone
 class Orientation
 {
     private float roll;
