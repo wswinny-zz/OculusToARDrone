@@ -21,7 +21,10 @@ public class KeyEvents : MonoBehaviour
         oculusControl = false;
         drone = new Drone();
         drone.connect();
+        if (drone.connect())
+            Debug.Log("Connected");
         oriantation = new Orientation();
+        Debug.Log("Start finished");
     }
 
     // Update is called once per frame
@@ -49,8 +52,11 @@ public class KeyEvents : MonoBehaviour
             {
                 Debug.Log("Takeoff");
                 drone.takeoff();
+                if (drone.takeoff())
+                    Debug.Log("Taking off");
                 flying = true;
             }
+            //#########################################OVR THING################################################
             OVRManager.display.RecenterPose();
         }
 
@@ -66,6 +72,12 @@ public class KeyEvents : MonoBehaviour
             oculusControl = false;
             drone.enterHoverMode();
             Debug.Log("Emergency stop");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            drone.reconnect();
+            Debug.Log("Return");
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -86,7 +98,11 @@ public class KeyEvents : MonoBehaviour
         {
             oriantation.setGaz(0.0f);
             drone.move(oriantation);
+<<<<<<< HEAD
             Debug.Log("Up/Down - Up");
+=======
+            Debug.Log("Down/Up");
+>>>>>>> c23b62557b5aade43f45bd88af977606bade48cd
         }
 
         //
@@ -269,6 +285,7 @@ class Drone
         }
 
         droneControl.ConnectToDroneNetworkAndDrone();
+        droneControl.ConnectToDrone();
         return true;
     }
 
@@ -333,5 +350,7 @@ class Drone
 
         if (droneControl.IsCommandPossible(flightMoveCommand))
             droneControl.SendCommand(flightMoveCommand);
+        else
+            Debug.Log("Move is not possible");
     }
 }
