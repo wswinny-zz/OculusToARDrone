@@ -1,11 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.VR;
-using System.Collections;
 
-using ARDrone.Control;
-using ARDrone.Control.Commands;
-using ARDrone.Control.Data;
-using ARDrone.Control.Events;
+using Oculus2ARDrone;
 
 public class KeyEvents : MonoBehaviour
 {
@@ -54,6 +50,7 @@ public class KeyEvents : MonoBehaviour
                     Debug.Log("Taking off");
                 flying = true;
             }
+            
             //#########################################OVR THING################################################
             OVRManager.display.RecenterPose();
         }
@@ -80,21 +77,21 @@ public class KeyEvents : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            oriantation.setGaz(.2f);
+            oriantation.Gaz = .2f;
             drone.move(oriantation);
             Debug.Log("Up");
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            oriantation.setGaz(-.2f);
+            oriantation.Gaz = -.2f;
             drone.move(oriantation);
             Debug.Log("Down");
         }
 
         if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
         {
-            oriantation.setGaz(0.0f);
+            oriantation.Gaz = 0.0f;
             drone.move(oriantation);
             Debug.Log("Down/Up");
         }
@@ -125,74 +122,74 @@ public class KeyEvents : MonoBehaviour
             else
                 roll = eulerAngles.z / 180;
 
-            oriantation.setRoll(roll);
-            oriantation.setPitch(pitch);
-            oriantation.setYaw(yaw);
+            oriantation.Roll = roll;
+            oriantation.Pitch = pitch;
+            oriantation.Yaw = yaw;
 
             drone.move(oriantation);
             Debug.Log("I am Oculus");
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.S))
             {
-                oriantation.setPitch(.2f);
+                oriantation.Pitch = .2f;
                 drone.move(oriantation);
-                Debug.Log("W");
+                Debug.Log("not W");
             }
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                oriantation.setRoll(-.2f);
+                oriantation.Roll = -.2f;
                 drone.move(oriantation);
                 Debug.Log("A");
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                oriantation.setPitch(-.2f);
+                oriantation.Pitch = -.2f;
                 drone.move(oriantation);
-                Debug.Log("S");
+                Debug.Log("not S");
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
-                oriantation.setRoll(.2f);
+                oriantation.Roll = .2f;
                 drone.move(oriantation);
                 Debug.Log("D");
             }
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                oriantation.setYaw(-.2f);
+                oriantation.Yaw = -.2f;
                 drone.move(oriantation);
                 Debug.Log("Left");
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                oriantation.setYaw(.2f);
+                oriantation.Yaw = .2f;
                 drone.move(oriantation);
                 Debug.Log("Right");
             }
 
             if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.W))
             {
-                oriantation.setPitch(0.0f);
+                oriantation.Pitch = 0.0f;
                 drone.move(oriantation);
                 Debug.Log("S");
             }
 
             if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
             {
-                oriantation.setRoll(0.0f);
+                oriantation.Roll = 0.0f;
                 drone.move(oriantation);
                 Debug.Log("D");
             }
 
             if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
             {
-                oriantation.setYaw(0.0f);
+                oriantation.Yaw = 0.0f;
                 drone.move(oriantation);
                 Debug.Log("Right");
             }
@@ -200,149 +197,4 @@ public class KeyEvents : MonoBehaviour
 
     }
 
-}
-
-class Orientation
-{
-    private float roll;
-    private float pitch;
-    private float yaw;
-    private float gaz;
-
-    public Orientation()
-    {
-        roll = 0;
-        pitch = 0;
-        yaw = 0;
-        gaz = 0;
-    }
-
-    public void setRoll(float r)
-    {
-        this.roll = r;
-    }
-
-    public float getRoll()
-    {
-        return this.roll;
-    }
-
-    public void setPitch(float p)
-    {
-        this.pitch = p;
-    }
-
-    public float getPitch()
-    {
-        return this.pitch;
-    }
-
-    public void setYaw(float y)
-    {
-        this.yaw = y;
-    }
-
-    public float getYaw()
-    {
-        return this.yaw;
-    }
-
-    public void setGaz(float g)
-    {
-        this.gaz = g;
-    }
-
-    public float getGaz()
-    {
-        return this.gaz;
-    }
-
-}
-
-class Drone
-{
-    private DroneConfig droneConfig = null;
-    private DroneControl droneControl = null;
-
-    public Drone()
-    {
-        droneConfig = new DroneConfig();
-        droneControl = new DroneControl(droneConfig);
-    }
-
-    public bool connect()
-    {
-        if (droneControl.IsConnected)
-        {
-            return false;
-        }
-
-        droneControl.ConnectToDrone();
-        return true;
-    }
-
-    public bool disconnect()
-    {
-        if (!droneControl.IsConnected)
-        {
-            return false;
-        }
-
-        droneControl.Disconnect();
-        return true;
-    }
-
-    public bool reconnect()
-    {
-        if (disconnect())
-            return false;
-
-        if (connect())
-            return false;
-
-        return true;
-    }
-
-    public bool takeoff()
-    {
-        Command takeOffCommand = new FlightModeCommand(DroneFlightMode.TakeOff);
-
-        if (!droneControl.IsCommandPossible(takeOffCommand))
-            return false;
-
-        droneControl.SendCommand(takeOffCommand);
-        return true;
-    }
-
-    public bool land()
-    {
-        Command landCommand = new FlightModeCommand(DroneFlightMode.Land);
-
-        if (!droneControl.IsCommandPossible(landCommand))
-            return false;
-
-        droneControl.SendCommand(landCommand);
-        return true;
-    }
-
-    public bool enterHoverMode()
-    {
-        Command enterHoverModeCommand = new HoverModeCommand(DroneHoverMode.Hover);
-
-        if (!droneControl.IsCommandPossible(enterHoverModeCommand))
-            return false;
-
-        droneControl.SendCommand(enterHoverModeCommand);
-        return true;
-    }
-
-    public void move(Orientation oriantation)
-    {
-        FlightMoveCommand flightMoveCommand = new FlightMoveCommand(oriantation.getRoll(), oriantation.getPitch(), oriantation.getYaw(), oriantation.getGaz());
-
-        if (droneControl.IsCommandPossible(flightMoveCommand))
-            droneControl.SendCommand(flightMoveCommand);
-        else
-            Debug.Log("Move is not possible");
-    }
 }
