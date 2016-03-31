@@ -19,8 +19,14 @@ namespace AR.Drone.Infrastructure
         {
             if (_cancellationTokenSource != null)
                 return;
+
+            UnityEngine.Debug.Log("Can you even lock??");
+            
             lock (this)
             {
+
+                UnityEngine.Debug.Log("Yay LOCKED!!");
+
                 if (_cancellationTokenSource != null)
                     return;
 

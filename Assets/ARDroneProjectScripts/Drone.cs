@@ -15,39 +15,20 @@ namespace Oculus2ARDrone
         public Drone()
         {
 
+            GlobalVariables.videoData = new byte[GlobalVariables.width * GlobalVariables.height * 3];
+
             GlobalVariables.videoPacketDecoderWorker = new VideoPacketDecoderWorker(PixelFormat.BGR24, true, OnVideoPacketDecoded);
             GlobalVariables.videoPacketDecoderWorker.Start();
 
             GlobalVariables.droneClient = new DroneClient("192.168.1.1");
             GlobalVariables.droneClient.UnhandledException += HandleUnhandledException;
             GlobalVariables.droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
-            //GlobalVariables.droneClient.NavigationDataAcquired += navData => navigationData = navData;
+            GlobalVariables.droneClient.NavigationDataAcquired += navData => GlobalVariables.navigationData = navData;
 
             GlobalVariables.videoPacketDecoderWorker.UnhandledException += HandleUnhandledException;
             GlobalVariables.droneClient.Start();
 
-            switchDroneCamera(AR.Drone.Client.Configuration.VideoChannelType.HorizontalPlusSmallVertical);
-        }
-
-        public bool connect()
-        {
-            return true;
-        }
-
-        public bool disconnect()
-        {
-            return true;
-        }
-
-        public bool reconnect()
-        {
-            if (disconnect())
-                return false;
-
-            if (connect())
-                return false;
-
-            return true;
+            switchDroneCamera(AR.Drone.Client.Configuration.VideoChannelType.Horizontal);
         }
 
         public bool takeoff()
@@ -83,11 +64,15 @@ namespace Oculus2ARDrone
         private void OnVideoPacketAcquired(VideoPacket packet)
         {
             if (GlobalVariables.videoPacketDecoderWorker.IsAlive)
+            {
+                Debug.Log("Hi I'm alive!!!!!");
                 GlobalVariables.videoPacketDecoderWorker.EnqueuePacket(packet);
+            }
         }
         
         private void OnVideoPacketDecoded(VideoFrame frame)
         {
+            Debug.Log("Video Data is here!!");
             GlobalVariables.videoData = frame.Data;
         }
 

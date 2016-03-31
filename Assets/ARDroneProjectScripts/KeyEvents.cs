@@ -16,8 +16,6 @@ public class KeyEvents : MonoBehaviour
         flying = false;
         oculusControl = false;
         drone = new Drone();
-        if (drone.connect())
-            Debug.Log("Connected");
         oriantation = new Orientation();
         Debug.Log("Start finished");
     }
@@ -50,50 +48,41 @@ public class KeyEvents : MonoBehaviour
                     Debug.Log("Taking off");
                 flying = true;
             }
-            
-            //#########################################OVR THING################################################
-            OVRManager.display.RecenterPose();
         }
 
         //Enter hover mode
         if (Input.GetKeyDown(KeyCode.Q))
         {
             drone.enterHoverMode();
-            Debug.Log("Hover");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             oculusControl = false;
             drone.enterHoverMode();
-            Debug.Log("Shift");
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            drone.reconnect();
-            Debug.Log("Return");
+            OVRManager.display.RecenterPose();
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             oriantation.Gaz = .2f;
             drone.move(oriantation);
-            Debug.Log("Up");
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             oriantation.Gaz = -.2f;
             drone.move(oriantation);
-            Debug.Log("Down");
         }
 
         if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
         {
             oriantation.Gaz = 0.0f;
             drone.move(oriantation);
-            Debug.Log("Down/Up");
         }
 
         //
@@ -135,56 +124,48 @@ public class KeyEvents : MonoBehaviour
             {
                 oriantation.Pitch = .2f;
                 drone.move(oriantation);
-                Debug.Log("not W");
             }
 
             if (Input.GetKeyDown(KeyCode.A))
             {
                 oriantation.Roll = -.2f;
                 drone.move(oriantation);
-                Debug.Log("A");
             }
 
             if (Input.GetKeyDown(KeyCode.W))
             {
                 oriantation.Pitch = -.2f;
                 drone.move(oriantation);
-                Debug.Log("not S");
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
                 oriantation.Roll = .2f;
                 drone.move(oriantation);
-                Debug.Log("D");
             }
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 oriantation.Yaw = -.2f;
                 drone.move(oriantation);
-                Debug.Log("Left");
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 oriantation.Yaw = .2f;
                 drone.move(oriantation);
-                Debug.Log("Right");
             }
 
             if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.W))
             {
                 oriantation.Pitch = 0.0f;
                 drone.move(oriantation);
-                Debug.Log("S");
             }
 
             if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
             {
                 oriantation.Roll = 0.0f;
                 drone.move(oriantation);
-                Debug.Log("D");
             }
 
             if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
@@ -195,6 +176,15 @@ public class KeyEvents : MonoBehaviour
             }
         }
 
+    }
+
+    void OnDestroy()
+    {
+        GlobalVariables.droneClient.Land();
+        GlobalVariables.droneClient.Stop();
+        GlobalVariables.droneClient.Dispose();
+        GlobalVariables.videoPacketDecoderWorker.Stop();
+        GlobalVariables.videoPacketDecoderWorker.Dispose();
     }
 
 }

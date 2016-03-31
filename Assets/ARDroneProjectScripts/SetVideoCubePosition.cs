@@ -17,7 +17,7 @@ public class SetVideoCubePosition : MonoBehaviour
         float frustWidth = FRUSTDIST * (float)Math.Tan(ConvertToRadians(fov / 2)) * 2;
         float frustHeight = frustWidth * (1 / aspectRatio);
 
-        gameObject.transform.localScale = new Vector3(frustWidth, frustHeight, 1);
+        gameObject.transform.localScale = new Vector3(-frustWidth, frustHeight, 1);
         gameObject.transform.position = new Vector3(0, 0, FRUSTDIST + 100);
     }
 
