@@ -22,5 +22,6 @@ namespace Oculus2ARDrone
         public static VideoPacketDecoderWorker videoPacketDecoderWorker;
         public static DroneClient droneClient;
         public static NavigationData navigationData;
+        public static WlanClient wlanClient;
     }
 }

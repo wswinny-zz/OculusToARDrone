@@ -29,6 +29,8 @@ namespace Oculus2ARDrone
             GlobalVariables.droneClient.Start();
 
             switchDroneCamera(AR.Drone.Client.Configuration.VideoChannelType.Horizontal);
+
+            GlobalVariables.wlanClient = new WlanClient();
         }
 
         public bool takeoff()
