@@ -74,7 +74,7 @@ public class KeyEvents : MonoBehaviour
             oriantation.Roll = controllerAngles.w;
             oriantation.Pitch = controllerAngles.x;
             oriantation.Yaw = controllerAngles.y;
-            oriantation.Gaz = controllerAngles.z;
+            oriantation.Gaz = -controllerAngles.z;
 
             drone.move(oriantation);
         }
